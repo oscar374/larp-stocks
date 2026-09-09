@@ -27,7 +27,6 @@ function calculateMA(dayCount: number, data: number[][]) {
 export default function Example() {
   const [dates, setDates] = useState<string[]>([]);
   const [stockData, setStockData] = useState<number[][]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchCandles() {
@@ -64,7 +63,6 @@ export default function Example() {
       } catch (error) {
         console.error("Failed to fetch candles:", error);
       } finally {
-        setLoading(false);
       }
     }
 
