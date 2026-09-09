@@ -6,6 +6,7 @@ export default function Home() {
         <>
             <h1 className="text-5xl">larp stocks</h1>
             <a href="/sampleStocks">sample stocks link</a>
+            <a href="/example">Lvidia example link</a>
         </>
     );
 }

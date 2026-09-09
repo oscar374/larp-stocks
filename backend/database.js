@@ -1,7 +1,7 @@
 import { Low } from 'lowdb';
 import { JSONFile } from 'lowdb/node';
 
-const adapter = new JSONFile(new URL('./stocks.json', import.meta.url));
+const adapter = new JSONFile(new URL('./data/stocks.json', import.meta.url));
 const db = new Low(adapter, {});
 
 await db.read();

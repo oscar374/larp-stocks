@@ -2,8 +2,9 @@ import { db } from "./database.js";
 import { stocksConfig } from "./stocksConfig.js";
 
 let ticksPerSecond = 1;
+let maximumNumberOfTicks = 900000;
 
-async function startBot(){
+async function startBot() {
     console.log("STOCKS BOT STARTED WITH CONFIG: ");
     console.log(stocksConfig);
 
@@ -31,7 +32,73 @@ async function startBot(){
         console.error('Error syncing stocksConfig to db:', e);
     }
 
-    setInterval(() => console.log("bot tick"), 1000 / ticksPerSecond);
+    botTick();
+    setInterval(() => {
+        botTick();
+    }, 1000 / ticksPerSecond);
+}
+
+async function botTick() {
+    let needsWrite = false;
+
+    db.data.stocks.forEach((stock, index) => {
+        if (!stock.ticks || !Array.isArray(stock.ticks)) {
+            stock.ticks = [];
+        }
+
+        if (!stock.trend) {
+            stock.trend = Math.random() > 0.5 ? "positive" : "negative";
+            needsWrite = true;
+        }
+
+        if (stock.trendChangeChanceEveryTick && Math.random() < stock.trendChangeChanceEveryTick) {
+            stock.trend = stock.trend === "positive" ? "negative" : "positive";
+        }
+
+        let currentPrice = stock.startingPrice;
+        if (stock.ticks.length === 0) {
+            stock.ticks.push({ date: Date.now(), price: currentPrice });
+            needsWrite = true;
+        } else {
+            currentPrice = stock.ticks[stock.ticks.length - 1].price;
+        }
+
+        let minMultiplier = -0.1;
+        let maxMultiplier = 0.1;
+
+        if (stock.trend === "negative") minMultiplier = -0.15; 
+        if (stock.trend === "positive") maxMultiplier = 0.15; 
+
+        const minChange = stock.wildness * minMultiplier;
+        const maxChange = stock.wildness * maxMultiplier;
+
+        const priceChange = (Math.random() * (maxChange - minChange)) + minChange;
+        let newPrice = currentPrice + priceChange;
+        newPrice = Math.floor(newPrice * 100) / 100;
+
+        if (newPrice < 0) newPrice = 0;
+
+        let newDate = Date.now();
+        const lastDate = stock.ticks[stock.ticks.length - 1].date;
+        
+        if (newDate <= lastDate) newDate = lastDate + 1;
+
+        stock.ticks.push({ date: newDate, price: newPrice });
+
+        if (stock.ticks.length > maximumNumberOfTicks) {
+            stock.ticks.shift();     
+        }
+
+        needsWrite = true;
+    });
+
+    if (needsWrite) {
+        try {
+            await db.write();
+        } catch (e) {
+            console.error('Error writing ticks to db:', e);
+        }
+    }
 }
 
 export { startBot };

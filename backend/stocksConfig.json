@@ -2,71 +2,15 @@
   {
     "name": "Lvidia",
     "wildness": 10,
-    "startingPrice": 100
+    "startingPrice": 100,
+    "trendChangeChanceEveryTick": 0.03
   },
   {
     "name": "Larphabet",
     "wildness": 5,
     "startingPrice": 80
-  },
-  {
-    "name": "Larperium",
-    "wildness": 5,
-    "startingPrice": 75
-  },
-  {
-    "name": "Larpthropic",
-    "wildness": 8,
-    "startingPrice": 90
-  },
-  {
-    "name": "Microlarp",
-    "wildness": 9,
-    "startingPrice": 55
-  },
-  {
-    "name": "Teslarp",
-    "wildness": 2,
-    "startingPrice": 60
-  },
-  {
-    "name": "Masterlarp",
-    "wildness": 7,
-    "startingPrice": 70
-  },
-  {
-    "name": "McLarps",
-    "wildness": 4,
-    "startingPrice": 35
-  },
-  {
-    "name": "Starlarps",
-    "wildness": 3,
-    "startingPrice": 15
-  },
-  {
-    "name": "LarpEx",
-    "wildness": 6,
-    "startingPrice": 26
-  },
-  {
-    "name": "LarpTendo",
-    "wildness": 7,
-    "startingPrice": 120
-  },
-  {
-    "name": "Larpcedes-Benz",
-    "wildness": 5,
-    "startingPrice": 80
-  },
-  {
-    "name": "Vanglarp",
-    "wildness": 2,
-    "startingPrice": 350
-  },
-  {
-    "name": "LarpAir",
-    "wildness": 6,
-    "startingPrice": 12
+    ,"trendChangeChanceEveryTick": 0.0001
   }
 ]
+
+
