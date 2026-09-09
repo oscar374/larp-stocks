@@ -2,9 +2,9 @@
 
 import { EChartsOption } from 'echarts';
 import * as ReactEChartsModule from 'echarts-for-react';
+import "../globals.css";
 
 const ReactECharts = (ReactEChartsModule as any).default || ReactEChartsModule;
-
 
 function calculateMA(dayCount: number, data: number[][]) {
   const result = [];
@@ -22,16 +22,15 @@ function calculateMA(dayCount: number, data: number[][]) {
   return result;
 }
 
-
 const dates = [
-  '2024-10-01', '2024-10-02', '2024-10-03', '2024-10-04', '2024-10-07',
-  '2024-10-08', '2024-10-09', '2024-10-10', '2024-10-11', '2024-10-14',
-  '2024-10-15', '2024-10-16', '2024-10-17', '2024-10-18', '2024-10-21',
-  '2024-10-22', '2024-10-23', '2024-10-24', '2024-10-25', '2024-10-28',
-  '2024-10-29', '2024-10-30', '2024-10-31', '2024-11-01', '2024-11-04',
-  '2024-11-05', '2024-11-06', '2024-11-07', '2024-11-08', '2024-11-11',
-  '2024-11-12', '2024-11-13', '2024-11-14', '2024-11-15', '2024-11-18',
-  '2024-11-19', '2024-11-20', '2024-11-21', '2024-11-22', '2024-11-25'
+  ' 10-01', ' 10-02', ' 10-03', ' 10-04', ' 10-07',
+  ' 10-08', ' 10-09', ' 10-10', ' 10-11', ' 10-14',
+  ' 10-15', ' 10-16', ' 10-17', ' 10-18', ' 10-21',
+  ' 10-22', ' 10-23', ' 10-24', ' 10-25', ' 10-28',
+  ' 10-29', ' 10-30', ' 10-31', ' 11-01', ' 11-04',
+  ' 11-05', ' 11-06', ' 11-07', ' 11-08', ' 11-11',
+  ' 11-12', ' 11-13', ' 11-14', ' 11-15', ' 11-18',
+  ' 11-19', ' 11-20', ' 11-21', ' 11-22', ' 11-25'
 ];
 
 const stockData = [
@@ -79,9 +78,17 @@ const stockData = [
 
 export default function SampleStocks() {
   const option: EChartsOption = {
+    // Tightens the inner canvas padding while preventing axis label clipping
+    grid: {
+      top: 40,
+      left: 10,
+      right: 10,
+      bottom: 10,
+      containLabel: true,
+    },
     legend: {
       data: ['Candlestick', 'MA5', 'MA10'],
-      top: 10,
+      top: 5,
     },
     tooltip: {
       trigger: 'axis',
@@ -92,21 +99,34 @@ export default function SampleStocks() {
     xAxis: {
       type: 'category',
       data: dates,
+      splitLine: {
+        show: true, // Grid lines on x-axis (vertical lines)
+        lineStyle: {
+          color: 'rgba(255, 255, 255, 0)',
+        },
+      },
     },
     yAxis: {
       scale: true,
+         splitLine: {
+        show: true, // Grid lines on x-axis (vertical lines)
+        lineStyle: {
+          color: 'rgba(255, 255, 255, 0.15)',
+        },
+      },
     },
     dataZoom: [
       {
         type: 'inside', 
-        start: 20,
+        start: 0,
         end: 100,
       },
       {
         type: 'slider', 
-        show: true,
-        top: '85%',
-        start: 20,
+        show: false,
+        bottom: 10,
+        height: 20,
+        start: 0,
         end: 100,
       },
     ],
@@ -115,6 +135,9 @@ export default function SampleStocks() {
         name: 'Candlestick',
         type: 'candlestick',
         data: stockData,
+        emphasis: {
+          focus: 'series',
+        },
       },
       {
         name: 'MA5',
@@ -124,7 +147,10 @@ export default function SampleStocks() {
         showSymbol: false,
         lineStyle: {
           width: 2,
-          color: '#5470c6',
+          color: '#5156e476',
+        },
+        emphasis: {
+          focus: 'series',
         },
       },
       {
@@ -135,7 +161,10 @@ export default function SampleStocks() {
         showSymbol: false,
         lineStyle: {
           width: 2,
-          color: '#91cc75',
+          color: '#75ef8789',
+        },
+        emphasis: {
+          focus: 'series',
         },
       },
     ],
@@ -144,8 +173,8 @@ export default function SampleStocks() {
   return (
     <div>
       <h1 className="text-5xl mb-4">sample stocks</h1>
-      <div style={{ width: '100%', height: '500px' }}>
-        <ReactECharts option={option} style={{ width: '100%', height: '100%' }} />
+      <div style={{ width: '40vw', height: '35vh' }}>
+        <ReactECharts className="sample-stocks" option={option} style={{ width: '100%', height: '100%' }} />
       </div>
     </div>
   );

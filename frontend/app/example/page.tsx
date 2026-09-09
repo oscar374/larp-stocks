@@ -32,9 +32,9 @@ export default function Example() {
     async function fetchCandles() {
       try {
         const queryParams = new URLSearchParams({
-          symbol: "LVIDIA",
+          symbol: "Lvidia",
           howMany: "500",
-          ticksInCandle: "60",
+          ticksInCandle: "40",
         });
 
         const response = await fetch(`http://localhost:8000/getCandles?${queryParams}`);
@@ -51,8 +51,8 @@ export default function Example() {
           );
 
           const formattedStockData = data.map((item) => [
-            item[0], // open
-            item[1], // close
+            item[1], // open
+            item[0], // close
             item[2], // lowest
             item[3], // highest
           ]);
@@ -68,7 +68,7 @@ export default function Example() {
 
     fetchCandles();
 
-    const interval = setInterval(fetchCandles, 1000);
+    const interval = setInterval(fetchCandles, 100000);
     return () => clearInterval(interval);
 
   }, []);
@@ -119,7 +119,7 @@ export default function Example() {
         showSymbol: false,
         lineStyle: {
           width: 2,
-          color: '#5470c6',
+          color: '#6c91ff',
         },
       },
       {
