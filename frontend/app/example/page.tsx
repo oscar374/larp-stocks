@@ -138,15 +138,12 @@ export default function Example() {
     ],
   };
 
-  return (
-    <div className="p-4">
-      {loading ? (
-        <p>Loading chart data...</p>
-      ) : (
-        <div style={{ width: '100%', height: '500px' }}>
-          <ReactECharts option={option} style={{ width: '100%', height: '100%' }} />
-        </div>
-      )}
+    return (
+    <div>
+      <h1 className="text-5xl mb-4">Lvidia example</h1>
+      <div style={{ width: '100%', height: '500px' }}>
+        <ReactECharts option={option} style={{ width: '100%', height: '100%' }} />
+      </div>
     </div>
   );
 }
