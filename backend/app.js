@@ -28,6 +28,11 @@ app.get("/stocks", async (req, res) => {
   res.json(db.data?.stocks || []);
 });
 
+app.post("/clearData", (req, res) => {
+  db.stocks = {};
+});
+
+
 app.get("/getCandles", async (req, res) => {
   const { symbol, howMany, ticksInCandle } = req.query;
 

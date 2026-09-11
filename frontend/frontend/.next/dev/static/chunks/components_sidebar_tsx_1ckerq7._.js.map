@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/oskar/OneDrive/Dokumenty/GitHub/larp%20stocks/frontend/components/sidebar.tsx"],"sourcesContent":["\"use client\";\r\n\r\nimport React from 'react';\r\n\r\nexport default function Sidebar() {\r\n  return (\r\n    <div className=\"sidebar\">\r\n        <h1 className=\"text-5xl\">larp stocks</h1>\r\n        <a href=\"/\">dashboard</a> <br></br>\r\n        <a href=\"/sampleStocks\">sample stocks link</a> <br></br>\r\n        <a href=\"/example\">Lvidia example link</a>\r\n    </div>\r\n  );\r\n}"],"names":["Sidebar","className","href"],"mappings":";;;;;AAAA;;AAIe,SAASA;IACtB,qBACE,6LAAC;QAAIC,WAAU;;0BACX,6LAAC;gBAAGA,WAAU;0BAAW;;;;;;0BACzB,6LAAC;gBAAEC,MAAK;0BAAI;;;;;;YAAa;0BAAC,6LAAC;;;;;0BAC3B,6LAAC;gBAAEA,MAAK;0BAAgB;;;;;;YAAsB;0BAAC,6LAAC;;;;;0BAChD,6LAAC;gBAAEA,MAAK;0BAAW;;;;;;;;;;;;AAG3B;KATwBF"}}]
+}

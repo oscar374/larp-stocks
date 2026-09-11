@@ -140,7 +140,7 @@ export default function Example() {
     return (
     <div>
       <div className="siteContainer">
-        <Sidebar />
+        <Sidebar/>
         <div className="content">
             <h1 className="text-5xl mb-4">Lvidia example</h1>
             <div style={{ width: '100%', height: '500px' }}>
