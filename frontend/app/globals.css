@@ -37,3 +37,21 @@ body {
   margin: 0px;
   padding: 0px;
 }
+
+/* LARP CSS */
+.sidebar{
+    border: 2px solid white;
+    color: white;
+    height: 100vh;
+    width: 10vw;
+}
+
+.content{
+    display: block;
+}
+
+.siteContainer{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+}

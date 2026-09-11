@@ -3,6 +3,7 @@
 import { EChartsOption } from 'echarts';
 import * as ReactEChartsModule from 'echarts-for-react';
 import "../globals.css";
+import Sidebar from '@/components/sidebar';
 
 const ReactECharts = (ReactEChartsModule as any).default || ReactEChartsModule;
 
@@ -172,9 +173,14 @@ export default function SampleStocks() {
 
   return (
     <div>
-      <h1 className="text-5xl mb-4">sample stocks</h1>
-      <div style={{ width: '40vw', height: '35vh' }}>
-        <ReactECharts className="sample-stocks" option={option} style={{ width: '100%', height: '100%' }} />
+      <div className="siteContainer">
+        <Sidebar />
+        <div className="content">
+          <h1 className="text-5xl mb-4">sample stocks</h1>
+          <div style={{ width: '40vw', height: '35vh' }}>
+            <ReactECharts className="sample-stocks" option={option} style={{ width: '100%', height: '100%' }} />
+          </div>
+        </div>
       </div>
     </div>
   );

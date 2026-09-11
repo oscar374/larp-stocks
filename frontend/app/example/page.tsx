@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { EChartsOption } from 'echarts';
 import * as ReactEChartsModule from 'echarts-for-react';
+import Sidebar from '@/components/sidebar';
 
 const ReactECharts = (ReactEChartsModule as any).default || ReactEChartsModule;
 
@@ -138,9 +139,14 @@ export default function Example() {
 
     return (
     <div>
-      <h1 className="text-5xl mb-4">Lvidia example</h1>
-      <div style={{ width: '100%', height: '500px' }}>
-        <ReactECharts option={option} style={{ width: '100%', height: '100%' }} />
+      <div className="siteContainer">
+        <Sidebar />
+        <div className="content">
+            <h1 className="text-5xl mb-4">Lvidia example</h1>
+            <div style={{ width: '100%', height: '500px' }}>
+              <ReactECharts option={option} style={{ width: '100%', height: '100%' }} />
+            </div>
+        </div>
       </div>
     </div>
   );
