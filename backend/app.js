@@ -1,9 +1,11 @@
 import express from "express";
-import { startBot } from "./stocksBot.js";
+import { startBot, setTickRate } from "./stocksBot.js";
 import { db } from "./database.js";
 
 const app = express();
 const PORT = 8000;
+
+app.use(express.json());
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -28,10 +30,24 @@ app.get("/stocks", async (req, res) => {
   res.json(db.data?.stocks || []);
 });
 
-app.post("/clearData", (req, res) => {
-  db.stocks = {};
+app.post("/clearData", async (req, res) => {
+  console.log("clearing data...");
+  db.data = {};
+  await db.write();
+  res.send("All stocks had been cleared");
 });
 
+app.post("/changeTickRate", async (req, res) => {
+  const tickrate = Number(req.body?.tickrate);
+
+  if (!Number.isFinite(tickrate) || tickrate <= 0) {
+    return res.status(400).json({ error: "incorrect tickrate" });
+  }
+
+  setTickRate(tickrate);
+
+  return res.json({ message: "changed tickrate", tickrate });
+});
 
 app.get("/getCandles", async (req, res) => {
   const { symbol, howMany, ticksInCandle } = req.query;
@@ -54,7 +70,7 @@ app.get("/getCandles", async (req, res) => {
 
   await db.read();
 
-  const stock = db.data?.stocks?.find((s) => s.name.toLowerCase() === String(symbol).toLowerCase());  //symbol fnd
+  const stock = db.data?.stocks?.find((s) => s.name.toLowerCase() === String(symbol).toLowerCase());
 
   if (!stock) return res.status(404).json({ error: "incorrect stock name symbol" });
 

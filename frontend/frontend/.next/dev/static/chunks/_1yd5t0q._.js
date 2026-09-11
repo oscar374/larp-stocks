@@ -44,9 +44,12 @@ function DevConsole() {
             ]);
     };
     const helpCommand = ()=>{
-        addLog("/help - all commands");
-        addLog("/clear - clears the console");
-        addLog("/cleardb - clears all stocks generated data");
+        addLog("");
+        addLog("help - all commands");
+        addLog("clear - clears the console");
+        addLog("cleardb - clears all stocks generated data");
+        addLog("/tickrate [tickrate] - changes bots tickrate (1 is default)");
+        addLog("");
     };
     const clearCommand = ()=>{
         setLogs([]);
@@ -54,15 +57,45 @@ function DevConsole() {
     const cleardbcom = ()=>{
         cleardb();
     };
+    const tickrateCommand = (args)=>{
+        if (!args[0]) {
+            addLog("Usage: /tickrate [tickrate]");
+            return;
+        }
+        const parsedTickrate = Number(args[0]);
+        if (!Number.isFinite(parsedTickrate) || parsedTickrate <= 0) {
+            addLog("Invalid tickrate");
+            return;
+        }
+        tickrate(parsedTickrate);
+    };
+    async function tickrate(tickrateValue) {
+        const response = await fetch("http://localhost:8000/changeTickRate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                tickrate: tickrateValue
+            })
+        });
+        addLog(`res: ${response.status}`);
+    }
     async function cleardb() {
-        const response = await fetch(`http://localhost:8000/clearData`);
+        addLog(`Clearing all stocks generated data...`);
+        const response = await fetch("http://localhost:8000/clearData", {
+            method: "POST"
+        });
         addLog(`res: ${response.status}`);
     }
     const executeCommand = ()=>{
         const command = input.trim();
         if (!command) return;
         addLog(`> ${command}`);
-        switch(command.toLowerCase()){
+        const parts = command.split(/\s+/);
+        const commandName = parts[0].toLowerCase();
+        const args = parts.slice(1);
+        switch(commandName){
             case "help":
                 helpCommand();
                 break;
@@ -71,6 +104,9 @@ function DevConsole() {
                 break;
             case "cleardb":
                 cleardbcom();
+                break;
+            case "tickrate":
+                tickrateCommand(args);
                 break;
             default:
                 addLog(`Unknown command: ${command}`);
@@ -84,10 +120,20 @@ function DevConsole() {
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                 className: "text-2xl select-none",
-                children: "dev console"
-            }, void 0, false, {
+                children: [
+                    "dev console  ",
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        className: "text-gray-800",
+                        children: "(shift + C to toggle)"
+                    }, void 0, false, {
+                        fileName: "[project]/components/devConsole.tsx",
+                        lineNumber: 125,
+                        columnNumber: 30
+                    }, this)
+                ]
+            }, void 0, true, {
                 fileName: "[project]/components/devConsole.tsx",
-                lineNumber: 81,
+                lineNumber: 124,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -97,12 +143,12 @@ function DevConsole() {
                         children: log
                     }, index, false, {
                         fileName: "[project]/components/devConsole.tsx",
-                        lineNumber: 87,
+                        lineNumber: 130,
                         columnNumber: 21
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/components/devConsole.tsx",
-                lineNumber: 85,
+                lineNumber: 128,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -118,13 +164,13 @@ function DevConsole() {
                 autoFocus: true
             }, void 0, false, {
                 fileName: "[project]/components/devConsole.tsx",
-                lineNumber: 93,
+                lineNumber: 136,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/devConsole.tsx",
-        lineNumber: 80,
+        lineNumber: 123,
         columnNumber: 9
     }, this);
 }

@@ -35,7 +35,7 @@ export default function Example() {
         const queryParams = new URLSearchParams({
           symbol: "Lvidia",
           howMany: "500",
-          ticksInCandle: "40",
+          ticksInCandle: "4",
         });
 
         const response = await fetch(`http://localhost:8000/getCandles?${queryParams}`);
@@ -69,7 +69,7 @@ export default function Example() {
 
     fetchCandles();
 
-    const interval = setInterval(fetchCandles, 100000);
+    const interval = setInterval(fetchCandles, 100);
     return () => clearInterval(interval);
 
   }, []);

@@ -11,6 +11,7 @@
 
 @layer theme {
   :root, :host {
+    --color-gray-800: #1e2939;
     --color-gray-950: #030712;
     --color-black: #000;
     --color-white: #fff;
@@ -25,6 +26,7 @@
 
   @supports (color: lab(0% 0 0)) {
     :root, :host {
+      --color-gray-800: lab(16.1051% -1.18239 -11.7533);
       --color-gray-950: lab(1.90334% .278696 -5.48866);
     }
   }
@@ -399,6 +401,10 @@
     line-height: var(--tw-leading, var(--text-5xl--line-height));
   }
 
+  .text-gray-800 {
+    color: var(--color-gray-800);
+  }
+
   .text-white {
     color: var(--color-white);
   }
@@ -458,6 +464,7 @@ body {
 }
 
 .content {
+  width: 90vw;
   display: block;
 }
 
