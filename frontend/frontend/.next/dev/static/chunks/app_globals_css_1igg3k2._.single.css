@@ -5,12 +5,18 @@
       --tw-translate-x: 0;
       --tw-translate-y: 0;
       --tw-translate-z: 0;
+      --tw-font-weight: initial;
     }
   }
 }
 
 @layer theme {
   :root, :host {
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+      "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+      "Segoe UI Symbol", "Noto Color Emoji";
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace;
     --color-gray-800: #1e2939;
     --color-gray-950: #030712;
     --color-black: #000;
@@ -20,8 +26,9 @@
     --text-2xl--line-height: calc(2 / 1.5);
     --text-5xl: 3rem;
     --text-5xl--line-height: 1;
-    --default-font-family: var(--font-geist-sans);
-    --default-mono-font-family: var(--font-geist-mono);
+    --font-weight-bold: 700;
+    --default-font-family: var(--font-sans);
+    --default-mono-font-family: var(--font-mono);
   }
 
   @supports (color: lab(0% 0 0)) {
@@ -388,7 +395,7 @@
   }
 
   .font-mono {
-    font-family: var(--font-geist-mono);
+    font-family: var(--font-mono);
   }
 
   .text-2xl {
@@ -399,6 +406,11 @@
   .text-5xl {
     font-size: var(--text-5xl);
     line-height: var(--tw-leading, var(--text-5xl--line-height));
+  }
+
+  .font-bold {
+    --tw-font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-bold);
   }
 
   .text-gray-800 {
@@ -428,6 +440,10 @@
 :root {
   --background: #fff;
   --foreground: #010101;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -458,9 +474,50 @@ body {
 
 .sidebar {
   color: #fff;
-  border: 2px solid #fff;
-  width: 10vw;
+  border-right: 1px solid #4c4c4c;
+  border-radius: 33px;
+  width: 12vw;
   height: 100vh;
+}
+
+.sidebar-header {
+  border-bottom: 1px solid #4c4c4c;
+  justify-content: left;
+  align-items: center;
+  height: 8vh;
+  padding-left: 15px;
+  display: flex;
+}
+
+.sidebar-content {
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  height: 90vh;
+  padding-top: 20px;
+  display: flex;
+}
+
+.sidebarButton {
+  color: #fff;
+  background-color: #4c4c4c1d;
+  border: 1px solid #2c2c2c65;
+  border-radius: 10px;
+  justify-content: left;
+  align-items: center;
+  width: 80%;
+  height: 40px;
+  padding: 10px;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all .3s, color .3s;
+  display: flex;
+}
+
+.sidebarButton:hover {
+  border-left: #010101;
+  padding-left: 20px;
+  box-shadow: inset 10px 0 #76ffb2;
 }
 
 .content {
@@ -472,6 +529,10 @@ body {
   width: 100vw;
   height: 100vh;
   display: flex;
+}
+
+svg {
+  margin-right: 2px;
 }
 
 @property --tw-translate-x {
@@ -490,6 +551,11 @@ body {
   syntax: "*";
   inherits: false;
   initial-value: 0;
+}
+
+@property --tw-font-weight {
+  syntax: "*";
+  inherits: false
 }
 
 /*# sourceMappingURL=app_globals_css_1igg3k2._.single.css.map*/
