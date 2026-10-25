@@ -30,6 +30,20 @@ app.get("/stocks", async (req, res) => {
   res.json(db.data?.stocks || []);
 });
 
+app.get("/market", async (req, res) => {
+  await db.read();
+  const stocks = db.data?.stocks;
+  if (!Array.isArray(stocks)) {
+    return res.status(503).json({ error: "market data is unavailable" });
+  }
+
+  return res.json(stocks.map((stock) => ({
+    name: stock.name,
+    price: stock.ticks?.at(-1)?.price ?? stock.startingPrice,
+    trend: stock.trend ?? "neutral",
+  })));
+});
+
 app.post("/clearData", async (req, res) => {
   console.log("clearing data...");
   db.data = {};
@@ -77,13 +91,16 @@ app.get("/getCandles", async (req, res) => {
   const ticks = stock.ticks || [];
   if (ticks.length === 0) return res.json([]);
 
-  const totalTicksNeeded = howManyInt * ticksInCandleInt;
-  const recentTicks = ticks.slice(-totalTicksNeeded);
-
   const candles = [];
+  const latestCandleStart =
+    Math.floor((ticks.length - 1) / ticksInCandleInt) * ticksInCandleInt;
+  const firstCandleStart = Math.max(
+    0,
+    latestCandleStart - (howManyInt - 1) * ticksInCandleInt,
+  );
 
-  for (let i = 0; i < recentTicks.length; i += ticksInCandleInt) {
-    const chunk = recentTicks.slice(i, i + ticksInCandleInt);
+  for (let i = firstCandleStart; i < ticks.length; i += ticksInCandleInt) {
+    const chunk = ticks.slice(i, i + ticksInCandleInt);
     if (chunk.length === 0) continue;
 
     const open = chunk[0].price;

@@ -1,28 +1,97 @@
 "use client";
 
-import React from 'react';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import BrandMark from "@/components/brandMark";
+import { readRecentStocks, RECENT_STOCKS_EVENT } from "@/lib/recentStocks";
+import { THEME_EVENT, THEME_KEY } from "@/lib/theme";
+
+const DEMO_USER_KEY = "larp-stocks-demo-user";
 
 export default function Sidebar() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const [recentStocks, setRecentStocks] = useState<string[]>([]);
+  const [darkTheme, setDarkTheme] = useState(false);
+
+  useEffect(() => {
+    const updateRecentStocks = () => setRecentStocks(readRecentStocks());
+    const savedTheme = localStorage.getItem(THEME_KEY);
+    const useDarkTheme = savedTheme === "dark";
+    document.documentElement.dataset.theme = useDarkTheme ? "dark" : "light";
+    queueMicrotask(() => setDarkTheme(useDarkTheme));
+    queueMicrotask(updateRecentStocks);
+    window.addEventListener(RECENT_STOCKS_EVENT, updateRecentStocks);
+    window.addEventListener("storage", updateRecentStocks);
+    return () => {
+      window.removeEventListener(RECENT_STOCKS_EVENT, updateRecentStocks);
+      window.removeEventListener("storage", updateRecentStocks);
+    };
+  }, []);
+
+  function toggleTheme() {
+    const nextIsDark = !darkTheme;
+    setDarkTheme(nextIsDark);
+    document.documentElement.dataset.theme = nextIsDark ? "dark" : "light";
+    localStorage.setItem(THEME_KEY, nextIsDark ? "dark" : "light");
+    window.dispatchEvent(new Event(THEME_EVENT));
+  }
+
+  function signOut() {
+    localStorage.removeItem(DEMO_USER_KEY);
+    router.replace("/");
+  }
+
   return (
-    <div className="sidebar">
-      <div className="sidebar-header">
-        <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="32px" fill="#76FFB2"><path d="M280-160v-86.67h-80v-466.66h80V-800h66.67v86.67h80v466.66h-80V-160H280Zm-13.33-153.33H360v-333.34h-93.33v333.34ZM613.33-160v-206.67h-80v-266.66h80V-800H680v166.67h80v266.66h-80V-160h-66.67ZM600-433.33h93.33v-133.34H600v133.34ZM313.33-480Zm333.34-20Z"/></svg>
-        <h2 className="text-2xl font-bold">LarpStocks</h2>
-      </div>
-      <div className="sidebar-content">
-        <a className="sidebarButton" href="/">
-        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="M336-552H216q-33 0-52.5-19.5T144-624v-120q0-33 19.5-52.5T216-816h120q33 0 52.5 19.5T408-744v120q0 33-19.5 52.5T336-552Zm-120-72h120v-120H216v120Zm120 480H216q-33 0-52.5-19.5T144-216v-120q0-33 19.5-52.5T216-408h120q33 0 52.5 19.5T408-336v120q0 33-19.5 52.5T336-144Zm-120-72h120v-120H216v120Zm528-336H624q-33 0-52.5-19.5T552-624v-120q0-33 19.5-52.5T624-816h120q33 0 52.5 19.5T816-744v120q0 33-19.5 52.5T744-552Zm-120-72h120v-120H624v120Zm120 480H624q-33 0-52.5-19.5T552-216v-120q0-33 19.5-52.5T624-408h120q33 0 52.5 19.5T816-336v120q0 33-19.5 52.5T744-144Zm-120-72h120v-120H624v120ZM336-624Zm0 288Zm288-288Zm0 288Z"/></svg>
-        Dashboard
-        </a> <br></br>
-        <a className="sidebarButton" href="/sampleStocks">
-        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="M336-552H216q-33 0-52.5-19.5T144-624v-120q0-33 19.5-52.5T216-816h120q33 0 52.5 19.5T408-744v120q0 33-19.5 52.5T336-552Zm-120-72h120v-120H216v120Zm120 480H216q-33 0-52.5-19.5T144-216v-120q0-33 19.5-52.5T216-408h120q33 0 52.5 19.5T408-336v120q0 33-19.5 52.5T336-144Zm-120-72h120v-120H216v120Zm528-336H624q-33 0-52.5-19.5T552-624v-120q0-33 19.5-52.5T624-816h120q33 0 52.5 19.5T816-744v120q0 33-19.5 52.5T744-552Zm-120-72h120v-120H624v120Zm120 480H624q-33 0-52.5-19.5T552-216v-120q0-33 19.5-52.5T624-408h120q33 0 52.5 19.5T816-336v120q0 33-19.5 52.5T744-144Zm-120-72h120v-120H624v120ZM336-624Zm0 288Zm288-288Zm0 288Z"/></svg>
-        sample stocks
-        </a> <br></br>
-        <a className="sidebarButton" href="/example">
-        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="M336-552H216q-33 0-52.5-19.5T144-624v-120q0-33 19.5-52.5T216-816h120q33 0 52.5 19.5T408-744v120q0 33-19.5 52.5T336-552Zm-120-72h120v-120H216v120Zm120 480H216q-33 0-52.5-19.5T144-216v-120q0-33 19.5-52.5T216-408h120q33 0 52.5 19.5T408-336v120q0 33-19.5 52.5T336-144Zm-120-72h120v-120H216v120Zm528-336H624q-33 0-52.5-19.5T552-624v-120q0-33 19.5-52.5T624-816h120q33 0 52.5 19.5T816-744v120q0 33-19.5 52.5T744-552Zm-120-72h120v-120H624v120Zm120 480H624q-33 0-52.5-19.5T552-216v-120q0-33 19.5-52.5T624-408h120q33 0 52.5 19.5T816-336v120q0 33-19.5 52.5T744-144Zm-120-72h120v-120H624v120ZM336-624Zm0 288Zm288-288Zm0 288Z"/></svg>
-        Lvidia
+    <aside className="sidebar">
+      <a className="brand sidebar-brand" href="/dashboard">
+        <BrandMark />
+        <span>LarpStocks</span>
+      </a>
+      <div className="sidebar-label">WORKSPACE</div>
+      <nav className="sidebar-nav" aria-label="Main navigation">
+        <a className={`sidebar-link${pathname === "/dashboard" ? " active" : ""}`} href="/dashboard">
+          <span className="nav-icon">▦</span>Dashboard
         </a>
+        <a className={`sidebar-link${pathname === "/sampleStocks" ? " active" : ""}`} href="/sampleStocks">
+          <span className="nav-icon">◫</span>Market samples
+        </a>
+        <a className={`sidebar-link${pathname === "/example" ? " active" : ""}`} href="/example">
+          <span className="nav-icon">⌁</span>Larp market
+          <span className="nav-live-dot" />
+        </a>
+        {recentStocks.length > 0 && (
+          <>
+            <div className="sidebar-label recent-sidebar-label">RECENT STOCKS</div>
+            {recentStocks.map((symbol) => (
+              <a
+                className="sidebar-link recent-stock-link"
+                href={`/example?symbol=${encodeURIComponent(symbol)}`}
+                key={symbol}
+              >
+                <span className="recent-stock-icon">▥</span>{symbol}
+              </a>
+            ))}
+          </>
+        )}
+      </nav>
+      <div className="sidebar-bottom">
+        <button
+          aria-pressed={darkTheme}
+          className="theme-toggle-button"
+          onClick={toggleTheme}
+          type="button"
+        >
+          <span className="nav-icon">{darkTheme ? "☾" : "☼"}</span>
+          {darkTheme ? "Dark theme" : "Light theme"}
+          <span className={`theme-switch${darkTheme ? " enabled" : ""}`} aria-hidden="true"><i /></span>
+        </button>
+        <button className="sign-out-button" onClick={signOut} type="button">
+          <span className="nav-icon">↪</span>Sign out
+        </button>
+        <span className="sidebar-version">LARPSTOCKS · DEMO EDITION</span>
       </div>
-    </div>
+    </aside>
   );
 }

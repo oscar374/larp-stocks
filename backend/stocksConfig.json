@@ -10,7 +10,78 @@
     "wildness": 5,
     "startingPrice": 80
     ,"trendChangeChanceEveryTick": 0.05
+  },
+  {
+    "name": "Larperium",
+    "wildness": 5,
+    "startingPrice": 75,
+    "trendChangeChanceEveryTick": 0.003
+  },
+  {
+    "name": "Larpthropic",
+    "wildness": 8,
+    "startingPrice": 90,
+    "trendChangeChanceEveryTick": 0.00001
+  },
+  {
+    "name": "Microlarp",
+    "wildness": 9,
+    "startingPrice": 55,
+    "trendChangeChanceEveryTick": 0.003
+  },
+  {
+    "name": "Teslarp",
+    "wildness": 2,
+    "startingPrice": 60,
+    "trendChangeChanceEveryTick": 0.0005
+  },
+  {
+    "name": "Masterlarp",
+    "wildness": 7,
+    "startingPrice": 70,
+    "trendChangeChanceEveryTick": 0.0002
+  },
+  {
+    "name": "McLarps",
+    "wildness": 4,
+    "startingPrice": 35,
+    "trendChangeChanceEveryTick": 0.0002
+  },
+  {
+    "name": "Starlarps",
+    "wildness": 3,
+    "startingPrice": 15,
+    "trendChangeChanceEveryTick": 0.0002
+  },
+  {
+    "name": "LarpEx",
+    "wildness": 1,
+    "startingPrice": 106,
+    "trendChangeChanceEveryTick": 0.0006
+  },
+  {
+    "name": "LarpTendo",
+    "wildness": 7,
+    "startingPrice": 120,
+    "trendChangeChanceEveryTick": 0.0002
+  },
+  {
+    "name": "Larpcedes-Benz",
+    "wildness": 5,
+    "startingPrice": 80,
+    "trendChangeChanceEveryTick": 0.1
+  },
+  {
+    "name": "Vanglarp",
+    "wildness": 2,
+    "startingPrice": 350,
+    "trendChangeChanceEveryTick": 0.0002
+  },
+  {
+    "name": "LarpAir",
+    "wildness": 6,
+    "startingPrice": 12,
+    "trendChangeChanceEveryTick": 0.0002
   }
 ]
-
 

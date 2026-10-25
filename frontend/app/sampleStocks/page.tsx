@@ -1,11 +1,11 @@
 'use client';
 
+import { useMemo, useState } from 'react';
 import { EChartsOption } from 'echarts';
-import * as ReactEChartsModule from 'echarts-for-react';
+import ReactECharts from 'echarts-for-react';
 import "../globals.css";
 import Sidebar from '@/components/sidebar';
-
-const ReactECharts = (ReactEChartsModule as any).default || ReactEChartsModule;
+import { useDarkTheme } from '@/lib/theme';
 
 function calculateMA(dayCount: number, data: number[][]) {
   const result = [];
@@ -78,7 +78,28 @@ const stockData = [
 ];
 
 export default function SampleStocks() {
+  const darkTheme = useDarkTheme();
+  const [predictedChange, setPredictedChange] = useState(5);
+  const [forecastPeriods, setForecastPeriods] = useState(5);
+  const currentPrice = stockData[stockData.length - 1][1];
+  const forecast = useMemo(() => {
+    const projectedPrices = Array.from({ length: forecastPeriods }, (_, index) =>
+      +(currentPrice * (1 + (predictedChange / 100) * ((index + 1) / forecastPeriods))).toFixed(2),
+    );
+    return {
+      dates: [...dates, ...projectedPrices.map((_, index) => `D+${index + 1}`)],
+      prices: [
+        ...Array(stockData.length - 1).fill(null),
+        currentPrice,
+        ...projectedPrices,
+      ],
+      targetPrice: projectedPrices[projectedPrices.length - 1] ?? currentPrice,
+    };
+  }, [currentPrice, forecastPeriods, predictedChange]);
+
   const option: EChartsOption = {
+    backgroundColor: 'transparent',
+    textStyle: { color: darkTheme ? '#d8d8c8' : '#57645b' },
     // Tightens the inner canvas padding while preventing axis label clipping
     grid: {
       top: 40,
@@ -88,8 +109,9 @@ export default function SampleStocks() {
       containLabel: true,
     },
     legend: {
-      data: ['Candlestick', 'MA5', 'MA10'],
+      data: ['Candlestick', 'MA5', 'MA10', 'Prediction'],
       top: 5,
+      textStyle: { color: darkTheme ? '#d8d8c8' : '#57645b' },
     },
     tooltip: {
       trigger: 'axis',
@@ -99,20 +121,24 @@ export default function SampleStocks() {
     },
     xAxis: {
       type: 'category',
-      data: dates,
+      data: forecast.dates,
+      axisLabel: { color: darkTheme ? '#aaa994' : '#7b877f' },
+      axisLine: { lineStyle: { color: darkTheme ? '#495247' : '#dce4de' } },
       splitLine: {
         show: true, // Grid lines on x-axis (vertical lines)
         lineStyle: {
-          color: 'rgba(255, 255, 255, 0)',
+          color: darkTheme ? 'rgba(214, 199, 126, 0.06)' : 'rgba(255, 255, 255, 0)',
         },
       },
     },
     yAxis: {
       scale: true,
+      axisLabel: { color: darkTheme ? '#aaa994' : '#7b877f' },
+      axisLine: { lineStyle: { color: darkTheme ? '#495247' : '#dce4de' } },
          splitLine: {
         show: true, // Grid lines on x-axis (vertical lines)
         lineStyle: {
-          color: 'rgba(255, 255, 255, 0.15)',
+          color: darkTheme ? 'rgba(214, 199, 126, 0.13)' : 'rgba(32, 56, 41, 0.08)',
         },
       },
     },
@@ -136,6 +162,12 @@ export default function SampleStocks() {
         name: 'Candlestick',
         type: 'candlestick',
         data: stockData,
+        itemStyle: {
+          color: darkTheme ? '#c6a64b' : '#ec6b66',
+          color0: darkTheme ? '#247c50' : '#39a675',
+          borderColor: darkTheme ? '#d3b85e' : '#ec6b66',
+          borderColor0: darkTheme ? '#42ad75' : '#39a675',
+        },
         emphasis: {
           focus: 'series',
         },
@@ -148,7 +180,7 @@ export default function SampleStocks() {
         showSymbol: false,
         lineStyle: {
           width: 2,
-          color: '#5156e476',
+          color: darkTheme ? '#d0b45d' : '#5156e4',
         },
         emphasis: {
           focus: 'series',
@@ -162,10 +194,23 @@ export default function SampleStocks() {
         showSymbol: false,
         lineStyle: {
           width: 2,
-          color: '#75ef8789',
+          color: darkTheme ? '#6fba8c' : '#75c687',
         },
         emphasis: {
           focus: 'series',
+        },
+      },
+      {
+        name: 'Prediction',
+        type: 'line',
+        data: forecast.prices,
+        smooth: false,
+        showSymbol: true,
+        symbolSize: 7,
+        lineStyle: {
+          width: 2,
+          type: 'dashed',
+          color: predictedChange >= 0 ? '#208b5b' : '#c65d5d',
         },
       },
     ],
@@ -175,10 +220,57 @@ export default function SampleStocks() {
     <div>
       <div className="siteContainer">
         <Sidebar />
-        <div className="content">
-          <h1 className="text-5xl mb-4">sample stocks</h1>
-          <div style={{ width: '40vw', height: '35vh' }}>
-            <ReactECharts className="sample-stocks" option={option} style={{ width: '100%', height: '100%' }} />
+        <div className="content sample-content">
+          <div className="chart-page-heading">
+            <div><span className="eyebrow">LEARN THE MARKET</span><h1>Market sandbox</h1></div>
+            <span className="account-chip"><span className="secure-dot" />PREDICTION MODE</span>
+          </div>
+          <p className="sample-intro">Shape a hypothetical price move and see how it could play out. Your prediction is a visual simulation, not a live trade.</p>
+          <div className="sample-page-layout">
+            <section className="market-card sample-chart-card">
+              <div className="section-heading">
+                <div><span className="eyebrow">HISTORICAL SAMPLE</span><h2>Market movement</h2></div>
+                <span className="sample-price">${currentPrice.toFixed(2)} <small>latest close</small></span>
+              </div>
+              <div className="sample-chart">
+                <ReactECharts className="sample-stocks" option={option} style={{ width: '100%', height: '100%' }} />
+              </div>
+              <div className="prediction-legend"><span /> Dashed line shows your predicted path; historical candles stay unchanged.</div>
+            </section>
+            <aside className="market-card prediction-menu">
+              <span className="eyebrow">SCENARIO BUILDER</span>
+              <h2>Predict a change</h2>
+              <p className="prediction-copy">Adjust the assumed price move. The chart updates instantly.</p>
+              <div className="prediction-value">
+                <span>Expected change</span>
+                <strong className={predictedChange < 0 ? 'prediction-down' : ''}>{predictedChange > 0 ? '+' : ''}{predictedChange}%</strong>
+              </div>
+              <label className="prediction-slider-label" htmlFor="prediction-change">Change from current price</label>
+              <input
+                className="prediction-slider"
+                id="prediction-change"
+                max="30"
+                min="-30"
+                onChange={(event) => setPredictedChange(Number(event.target.value))}
+                step="1"
+                type="range"
+                value={predictedChange}
+              />
+              <div className="slider-labels"><span>-30%</span><span>0%</span><span>+30%</span></div>
+              <label className="field-label forecast-label" htmlFor="forecast-periods">Forecast periods</label>
+              <select id="forecast-periods" onChange={(event) => setForecastPeriods(Number(event.target.value))} value={forecastPeriods}>
+                <option value={3}>3 periods</option>
+                <option value={5}>5 periods</option>
+                <option value={8}>8 periods</option>
+                <option value={12}>12 periods</option>
+              </select>
+              <div className="forecast-result">
+                <span>Hypothetical target</span>
+                <strong className={predictedChange < 0 ? 'prediction-down' : ''}>${forecast.targetPrice.toFixed(2)}</strong>
+                <small>After {forecastPeriods} simulated periods</small>
+              </div>
+              <button className="secondary-button reset-prediction" onClick={() => { setPredictedChange(0); setForecastPeriods(5); }} type="button">Reset prediction</button>
+            </aside>
           </div>
         </div>
       </div>
